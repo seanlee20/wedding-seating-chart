@@ -63,14 +63,13 @@
 <script>
 /* Multi-page single-file site (hash router)
    Data expected in repo root next to index.html:
-     - guests.csv or guests.json
+     - guests.csv
      - floorplan.png (optional)
      - menu.pdf (placed in repo root and will be embedded on the Menu page)
    Photos page: opens a Google Drive folder (replace placeholder URL below with your folder link)
 */
 
 const GUESTS_CSV_PATH = './guests.csv';
-const GUESTS_JSON_PATH = './guests.json';
 const FLOORPLAN_PATH = './floorplan.png';
 const MENU_PDF_PATH = './menu.pdf';
 const GOOGLE_DRIVE_UPLOAD_URL = 'https://drive.google.com/drive/folders/YOUR_FOLDER_ID_HERE'; // replace with your folder link
@@ -89,32 +88,13 @@ function parseCSV(text){
     } else {
       if(ch==='"'){ inQuotes=true; i++; continue; }
       if(ch===','){ row.push(cur); cur=''; i++; continue; }
-      if(ch==='
-'){ i++; continue; }
-      if(ch==='
-'){ row.push(cur); rows.push(row); row=[]; cur=''; i++; continue; }
+      if(ch==='\r'){ i++; continue; }
+      if(ch==='\n'){ row.push(cur); rows.push(row); row=[]; cur=''; i++; continue; }
       cur+=ch; i++;
     }
   }
   if(cur!==''||inQuotes||row.length>0){ row.push(cur); rows.push(row); }
   return rows;
-}
-
-function rowsToGuests(rows){
-  if(!rows || rows.length===0) return [];
-  const header = rows[0].map(c=> (c||'').trim().toLowerCase());
-  const hasHeader = header.some(h=>h && (h.includes('name')||h.includes('first')||h.includes('last')));
-
-  let nameIdx = header.indexOf('name'); if(nameIdx===-1) nameIdx=header.indexOf('full_name');
-  const firstCandidates=['first','first_name','given'];
-  const lastCandidates=['last','last_name','surname'];
-  let firstIdx=-1,lastIdx=-1;
-  header.forEach((h,idx)=>{ if(firstIdx===-1 && firstCandidates.includes(h)) firstIdx=idx; if(lastIdx===-1 && lastCandidates.includes(h)) lastIdx=idx; });
-  let tableIdx=-1; ['table','table_no','table_number','seat'].forEach(k=>{ const i=header.indexOf(k); if(i!==-1 && tableIdx===-1) tableIdx=i });
-
-  const out=[]; const start = hasHeader?1:0;
-  for(let r=start;r<rows.length;r++){ const row=rows[r]; if(!row||row.length===0) continue; let name=''; if(nameIdx!==-1) name=(row[nameIdx]||'').trim(); else { const first=(firstIdx!==-1?(row[firstIdx]||''):'').trim(); const last=(lastIdx!==-1?(row[lastIdx]||''):'').trim(); name=[first,last].filter(Boolean).join(' '); if(!name){ name=((row[0]||'')+' '+(row[1]||'')).trim(); } } const table=(tableIdx!==-1?(row[tableIdx]||''):(row[2]||'')).trim(); if(!name) continue; out.push({name:name, table:table||''}); }
-  return out;
 }
 
 function normalizeHeader(h){
@@ -173,9 +153,16 @@ function rowsToGuests(rows){
 }
 
 async function tryLoadGuests(){
-  try{ const r = await fetch(GUESTS_JSON_PATH, {cache:'no-store'}); if(r.ok){ guests = await r.json(); console.log('Loaded guests.json'); return; } }catch(e){}
-  try{ const r = await fetch(GUESTS_CSV_PATH, {cache:'no-store'}); if(r.ok){ const txt = await r.text(); const rows = parseCSV(txt); const parsed = rowsToGuests(rows); if(parsed.length>0){ guests = parsed; console.log('Loaded guests.csv'); return; } } }catch(e){}
-  guests = [{name:'Cynthia Lee',table:'1'},{name:'Sean Miller',table:'1'},{name:'Guest Example',table:'5'}];
+  try {
+    const r = await fetch(GUESTS_CSV_PATH, {cache:'no-store'});
+    if (r.ok) {
+      const txt = await r.text();
+      const rows = parseCSV(txt);
+      const parsed = rowsToGuests(rows);
+      if (parsed.length > 0) { guests = parsed; console.log('Loaded guests.csv'); return; }
+    }
+  } catch(e) {}
+  console.warn('Could not load guests.csv');
 }
 
 function normalize(s){ return String(s||'').trim().toLowerCase().replace(/\s+/g,' '); }
