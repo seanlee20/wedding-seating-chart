@@ -3,151 +3,180 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Wedding Seating Chart — Find Your Table</title>
+  <title>Cynthia & Sean — Find Your Table</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#f8f6f3;--card:#ffffff;--accent:#8b5cf6;--muted:#6b6b6b}
+    :root{--bg:#faf9f7;--card:#fff;--accent:#2b5a4a;--muted:#6b6b6b}
     *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;background:linear-gradient(180deg,var(--bg),#fff);color:#222}
-    .page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px}
-    .card{width:100%;max-width:760px;background:var(--card);padding:36px;border-radius:16px;box-shadow:0 10px 30px rgba(18,18,18,0.06)}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-    h1{font-family:'Playfair Display',serif;margin:0;font-size:28px}
-    p.lead{margin:6px 0 0;color:var(--muted)}
-    .search{display:flex;gap:12px;margin:18px 0}
-    input.searchbox{flex:1;padding:14px 16px;border-radius:10px;border:1px solid #eee;font-size:16px}
-    button.clear{padding:12px 16px;border-radius:10px;border:none;background:#f1f1f1}
-    .result{margin-top:10px;padding:18px;border-radius:12px;border:1px dashed #eee;background:linear-gradient(180deg, #fff, #fcfcff)}
-    .tableBadge{display:inline-block;margin-top:6px;padding:8px 12px;border-radius:999px;background:linear-gradient(90deg, rgba(139,92,246,0.12), rgba(139,92,246,0.06));color:var(--accent);font-weight:600}
-    .note{font-size:13px;color:var(--muted);margin-top:12px}
-    footer.small{margin-top:18px;font-size:13px;color:var(--muted)}
-    .admin{margin-top:20px;border-top:1px dashed #eee;padding-top:16px}
-    .table-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:12px}
-    .table-card{padding:12px;border-radius:8px;background:#fafafa;border:1px solid #f0eff8}
-    .hidden{display:none}
-    @media (max-width:520px){.page{padding:20px}.card{padding:20px}}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:#222}
+    .wrap{min-height:100vh;display:flex;flex-direction:column}
+    header.site{padding:20px 28px;background:#fff;border-bottom:1px solid #f0efe9;display:flex;align-items:center;justify-content:space-between}
+    .brand{font-family:'Playfair Display',serif;font-size:20px;color:var(--accent)}
+    nav a{margin-left:14px;text-decoration:none;color:#333;font-weight:600}
+    main{flex:1;display:flex;align-items:center;justify-content:center;padding:36px}
+
+    .card{width:100%;max-width:920px;background:var(--card);padding:36px;border-radius:14px;box-shadow:0 10px 30px rgba(10,10,10,0.05)}
+    h1.title{margin:0;font-family:'Playfair Display',serif;font-size:34px;color:var(--accent)}
+    p.lead{color:var(--muted);margin-top:8px}
+
+    /* search */
+    .searchRow{display:flex;gap:12px;margin-top:20px}
+    input.searchbox{flex:1;padding:12px 14px;border-radius:10px;border:1px solid #eee;font-size:16px}
+    .result{margin-top:16px;padding:18px;border-radius:12px;background:#fff;border:1px dashed #eee}
+    .tableBadge{display:inline-block;padding:8px 12px;border-radius:999px;background:linear-gradient(90deg, rgba(43,90,74,0.12), rgba(43,90,74,0.06));color:var(--accent);font-weight:700}
+
+    /* floorplan */
+    .floorplan img{max-width:100%;height:auto;border-radius:8px;display:block;margin:12px auto}
+
+    /* menu */
+    .menuEmbed{width:100%;height:800px;border-radius:8px;border:1px solid #eee;display:block;margin-top:12px}
+
+    /* photos */
+    .photos .btn{display:inline-block;padding:10px 14px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none}
+
+    footer.small{padding:18px;text-align:center;color:var(--muted);font-size:13px}
+
+    @media (max-width:720px){.menuEmbed{height:500px}}
   </style>
 </head>
 <body>
-  <div class="page">
-    <main class="card" role="main">
-      <header>
-        <div>
-          <h1>Wedding Seating Chart</h1>
-          <p class="lead">Type your name and we'll find your table</p>
-        </div>
-        <div style="text-align:right">
-          <small style="color:var(--muted)">Sea to Sky Gondola — May 23, 2026</small>
-        </div>
-      </header>
+  <div class="wrap">
+    <header class="site">
+      <div class="brand">Cynthia & Sean</div>
+      <nav aria-label="Primary">
+        <a href="#/" data-link>Find Seat</a>
+        <a href="#/floorplan" data-link>Floor Plan</a>
+        <a href="#/menu" data-link>Menu</a>
+        <a href="#/photos" data-link>Photos</a>
+      </nav>
+    </header>
 
-      <div class="search">
-        <input id="query" class="searchbox" placeholder="Enter your full name (e.g. Sean Lee)" autofocus />
-        <button id="clearBtn" class="clear" title="Clear">✕</button>
+    <main>
+      <div class="card" id="app">
+        <!-- pages render here -->
       </div>
-
-      <div id="resultArea" class="result hidden" aria-live="polite"></div>
-
-      <p class="note">Tip: spelling doesn't have to be exact — try first or last name only.</p>
-
-      <div id="tables" class="table-list" aria-hidden="true"></div>
     </main>
+
+    <footer class="small">May 23, 2026 • Sea to Sky Gondola, Squamish</footer>
   </div>
 
 <script>
-// --- CONFIG: you can replace this by hosting a guests.json file next to index.html ---
-// By default this will attempt to fetch ./guests.json. If not present, it falls back to an embedded sample list.
+/* Multi-page single-file site (hash router)
+   Data expected in repo root next to index.html:
+     - guests.csv or guests.json
+     - floorplan.png (optional)
+     - menu.pdf (placed in repo root and will be embedded on the Menu page)
+   Photos page: opens a Google Drive folder (replace placeholder URL below with your folder link)
+*/
+
+const GUESTS_CSV_PATH = './guests.csv';
 const GUESTS_JSON_PATH = './guests.json';
+const FLOORPLAN_PATH = './floorplan.png';
+const MENU_PDF_PATH = './menu.pdf';
+const GOOGLE_DRIVE_UPLOAD_URL = 'https://drive.google.com/drive/folders/YOUR_FOLDER_ID_HERE'; // replace with your folder link
 
 let guests = [];
 
-async function loadGuests(){
-  try{
-    const res = await fetch(GUESTS_JSON_PATH, {cache: 'no-store'});
-    if(!res.ok) throw new Error('no external file');
-    guests = await res.json();
-    console.log(`Loaded ${guests.length} guests from guests.json`);
-  }catch(e){
-    // fallback sample data
-    guests = [
-      {"name":"Amanda Lee","table":"1"},
-      {"name":"Marcus Chen","table":"1"},
-      {"name":"Samir Patel","table":"5"},
-      {"name":"Olivia Gomez","table":"3"},
-      {"name":"Ethan Brown","table":"2"}
-    ];
-    console.log('Using embedded sample guest list — create guests.json to customize.');
+// CSV parser (tolerant)
+function parseCSV(text){
+  const rows = [];
+  let i=0, cur='', row=[], inQuotes=false;
+  while(i<text.length){
+    const ch = text[i];
+    if(inQuotes){
+      if(ch==='"'){ if(text[i+1]==='"'){ cur+='"'; i+=2; continue;} inQuotes=false; i++; continue; }
+      cur+=ch; i++;
+    } else {
+      if(ch==='"'){ inQuotes=true; i++; continue; }
+      if(ch===','){ row.push(cur); cur=''; i++; continue; }
+      if(ch===''){ i++; continue; }
+      if(ch==='
+'){ row.push(cur); rows.push(row); row=[]; cur=''; i++; continue; }
+      cur+=ch; i++;
+    }
   }
+  if(cur!==''||inQuotes||row.length>0){ row.push(cur); rows.push(row); }
+  return rows;
 }
 
-function normalize(s){return s.trim().toLowerCase().replace(/\s+/g,' ')}
+function rowsToGuests(rows){
+  if(!rows || rows.length===0) return [];
+  const header = rows[0].map(c=> (c||'').trim().toLowerCase());
+  const hasHeader = header.some(h=>h && (h.includes('name')||h.includes('first')||h.includes('last')));
 
-function findMatches(query){
-  const q = normalize(query);
-  if(!q) return [];
-  // match if name contains all tokens in q (order-insensitive)
-  const qtok = q.split(' ');
-  return guests.filter(g=>{
-    const name = normalize(g.name);
-    return qtok.every(t=>name.includes(t));
-  });
+  let nameIdx = header.indexOf('name'); if(nameIdx===-1) nameIdx=header.indexOf('full_name');
+  const firstCandidates=['first','first_name','given'];
+  const lastCandidates=['last','last_name','surname'];
+  let firstIdx=-1,lastIdx=-1;
+  header.forEach((h,idx)=>{ if(firstIdx===-1 && firstCandidates.includes(h)) firstIdx=idx; if(lastIdx===-1 && lastCandidates.includes(h)) lastIdx=idx; });
+  let tableIdx=-1; ['table','table_no','table_number','seat'].forEach(k=>{ const i=header.indexOf(k); if(i!==-1 && tableIdx===-1) tableIdx=i });
+
+  const out=[]; const start = hasHeader?1:0;
+  for(let r=start;r<rows.length;r++){ const row=rows[r]; if(!row||row.length===0) continue; let name=''; if(nameIdx!==-1) name=(row[nameIdx]||'').trim(); else { const first=(firstIdx!==-1?(row[firstIdx]||''):'').trim(); const last=(lastIdx!==-1?(row[lastIdx]||''):'').trim(); name=[first,last].filter(Boolean).join(' '); if(!name){ name=((row[0]||'')+' '+(row[1]||'')).trim(); } } const table=(tableIdx!==-1?(row[tableIdx]||''):(row[2]||'')).trim(); if(!name) continue; out.push({name:name, table:table||''}); }
+  return out;
 }
 
-function showResult(matches, query){
-  const area = document.getElementById('resultArea');
-  const tablesContainer = document.getElementById('tables');
-  if(!query){ area.classList.add('hidden'); tablesContainer.setAttribute('aria-hidden','true'); tablesContainer.innerHTML=''; return }
-
-  if(matches.length===0){
-    area.innerHTML = `<strong>No match</strong><div class="note">We couldn't find that name. Try first name only or check spelling.</div>`;
-    area.classList.remove('hidden');
-    tablesContainer.setAttribute('aria-hidden','true');
-    tablesContainer.innerHTML='';
-    return;
-  }
-
-  // If exact single match, show table big
-  if(matches.length===1){
-    const m = matches[0];
-    area.innerHTML = `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><div><strong style=\"font-size:18px\">${escapeHtml(m.name)}</strong><div class=\"note\">You are seated at</div></div><div class=\"tableBadge\">Table ${escapeHtml(m.table)}</div></div>`;
-    area.classList.remove('hidden');
-    tablesContainer.setAttribute('aria-hidden','true');
-    tablesContainer.innerHTML='';
-    return;
-  }
-
-  // multiple matches — show list of names and their tables
-  const rows = matches.map(m=>`<div class="table-card"><strong>${escapeHtml(m.name)}</strong><div class="note">Table ${escapeHtml(m.table)}</div></div>`).join('');
-  area.innerHTML = `<strong>Multiple matches (${matches.length})</strong><div class="note">Select your name below.</div>`;
-  area.classList.remove('hidden');
-  tablesContainer.setAttribute('aria-hidden','false');
-  tablesContainer.innerHTML = rows;
+async function tryLoadGuests(){
+  try{ const r = await fetch(GUESTS_JSON_PATH, {cache:'no-store'}); if(r.ok){ guests = await r.json(); console.log('Loaded guests.json'); return; } }catch(e){}
+  try{ const r = await fetch(GUESTS_CSV_PATH, {cache:'no-store'}); if(r.ok){ const txt = await r.text(); const rows = parseCSV(txt); const parsed = rowsToGuests(rows); if(parsed.length>0){ guests = parsed; console.log('Loaded guests.csv'); return; } } }catch(e){}
+  guests = [{name:'Cynthia Lee',table:'1'},{name:'Sean Miller',table:'1'},{name:'Guest Example',table:'5'}];
 }
 
-function escapeHtml(s){return String(s).replace(/[&<>"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]))}
+function normalize(s){ return String(s||'').trim().toLowerCase().replace(/\s+/g,' '); }
+function findMatches(q){ const s=normalize(q); if(!s) return []; const toks=s.split(' '); return guests.filter(g=>{ const n=normalize(g.name); return toks.every(t=>n.includes(t)); }); }
 
-// UI wiring
-document.getElementById('query').addEventListener('input', e=>{
-  const q = e.target.value;
-  const matches = findMatches(q);
-  showResult(matches, q);
-});
+function renderHome(){
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <h1 class="title">Find your seat</h1>
+    <p class="lead">Cynthia & Sean — May 23, 2026 • Sea to Sky Gondola, Squamish</p>
+    <div class="searchRow">
+      <input id="query" class="searchbox" placeholder="Type your name (first, last or both)" />
+    </div>
+    <div id="result" class="result hidden" aria-live="polite"></div>
+  `;
+  const query = document.getElementById('query'); const result = document.getElementById('result');
+  query.addEventListener('input', ()=>{ const q=query.value; const matches=findMatches(q); showSearchResult(matches,q,result); });
+}
 
-document.getElementById('clearBtn').addEventListener('click', ()=>{
-  const q = document.getElementById('query'); q.value=''; q.focus(); showResult([], '');
-});
+function showSearchResult(matches, q, area){
+  if(!q){ area.classList.add('hidden'); area.innerHTML=''; return; }
+  if(matches.length===0){ area.classList.remove('hidden'); area.innerHTML=`<strong>No match</strong><div class="note">We couldn't find that name. Try first name only or check spelling.</div>`; return; }
+  if(matches.length===1){ const m=matches[0]; area.classList.remove('hidden'); area.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between"><div><strong>${escapeHtml(m.name)}</strong><div class="note">You are seated at</div></div><div class="tableBadge">Table ${escapeHtml(m.table)}</div></div>`; return; }
+  const rows = matches.map(m=>`<div class="table-card"><strong>${escapeHtml(m.name)}</strong><div class="note">Table ${escapeHtml(m.table)}</div></div>`).join(''); area.classList.remove('hidden'); area.innerHTML=`<strong>Multiple matches (${matches.length})</strong><div class="note">Select your name below.</div>${rows}`;
+}
 
-// load guests on start
-loadGuests();
+function renderFloorplan(){
+  const app = document.getElementById('app');
+  app.innerHTML = `<h1 class="title">Floor Plan</h1><p class="lead">Tap or zoom the image to view the seating layout. Place <code>floorplan.png</code> in the repo root to customize.</p><div class="floorplan"><img src="${FLOORPLAN_PATH}" alt="Floor plan (replace floorplan.png in repo)" onerror="this.style.display='none'" /></div>`;
+}
 
-// Accessibility: allow Enter to focus first result (useful on mobile)
-document.getElementById('query').addEventListener('keydown', e=>{
-  if(e.key==='Enter'){
-    // if a single match, announce
-    const q = e.target.value; const matches = findMatches(q);
-    showResult(matches, q);
-  }
-});
+function renderMenu(){
+  const app = document.getElementById('app');
+  app.innerHTML = `<h1 class="title">Menu</h1><p class="lead">Our wedding menu — click below to view or download the PDF.</p><div><a href="${MENU_PDF_PATH}" target="_blank" rel="noopener">Open menu (PDF)</a></div><embed src="${MENU_PDF_PATH}" class="menuEmbed" type="application/pdf" onerror="this.style.display='none'" />`;
+}
+
+function renderPhotos(){
+  const app = document.getElementById('app');
+  app.innerHTML = `<h1 class="title">Share Photos</h1><p class="lead">We'd love your photos — upload to the shared Google Drive folder below.</p><p><a class="btn" href="${GOOGLE_DRIVE_UPLOAD_URL}" target="_blank" rel="noopener">Open Google Drive Upload Folder</a></p><p class="note">Tip: use the Google Drive "New ➜ File upload" button to add photos. Replace the drive link in the code with your folder URL before publishing.</p>`;
+}
+
+function router(){
+  const hash = location.hash || '#/';
+  const route = hash.replace(/^#/,'').split('?')[0];
+  if(route === '/' || route === '') renderHome();
+  else if(route === '/floorplan') renderFloorplan();
+  else if(route === '/menu') renderMenu();
+  else if(route === '/photos') renderPhotos();
+  else renderHome();
+}
+
+window.addEventListener('hashchange', router);
+
+function escapeHtml(s){ return String(s||'').replace(/[&<>"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c])); }
+
+// initialize
+(async function(){ await tryLoadGuests(); router(); })();
 </script>
 </body>
 </html>

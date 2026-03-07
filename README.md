@@ -1,20 +1,17 @@
-Wedding Seating Chart
-=====================
+Cynthia & Sean — Wedding site
 
-Files:
-- index.html  -- main site (drop into repo root for GitHub Pages)
-- guests.json -- sample guest list. Edit or replace with your exported JSON.
-- watercolor.png -- optional decorative image (drop your artwork in repo root with this name)
+Files in this repo:
+- index.html  (multi-page site)
+- guests.csv  (guest list; replace with your CSV containing name/table or first,last,table)
+- floorplan.png (optional)
+- menu.pdf     (optional; place your PDF here and the Menu page will embed it)
+- watercolor.png (optional decorative image)
 
-How to host on GitHub Pages:
-1. Create a new GitHub repository (public or private).
-2. Add these files to the repository root and commit.
-3. In the repo Settings -> Pages, choose the main branch and / (root) as the source.
-4. Wait a minute; your site will be available at: https://<your-username>.github.io/<repo-name>/
+To host on GitHub Pages:
+1. Create a new repository and push these files to the repo root.
+2. In the repo Settings -> Pages, choose the main branch and root (/)
+3. Wait a minute and your site will be at https://<your-username>.github.io/<repo-name>/
 
-How to update guest list:
-- Edit guests.json locally or generate it using the CSV import UI inside the page (Admin section).
-- Commit guests.json to the repo and GitHub Pages will serve the updated list.
+Photos page: open the HTML and replace the GOOGLE_DRIVE_UPLOAD_URL constant with your Google Drive folder link for uploads.
 
-Privacy note:
-- If you don't want the guest list public, keep the repo private. GitHub Pages for private repos requires a paid plan or alternative hosting (Netlify/Vercel).
+Privacy: If you don't want the guest list public, keep the GitHub repo private.
