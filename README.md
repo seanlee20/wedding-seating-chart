@@ -6,4 +6,4 @@ Files:
 - menu.pdf    (optional)
 - watercolor.png (optional)
 
-The Google Drive upload link is configured in `index.html`.
+The Google Photos album link is configured in `index.html`.

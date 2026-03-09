@@ -78,13 +78,13 @@
      - guests.csv
      - floorplan.png (optional)
      - menu.pdf (placed in repo root and will be embedded on the Menu page)
-   Photos page: opens a Google Drive folder (replace placeholder URL below with your folder link)
+   Photos page: opens a shared Google Photos album
 */
 
 const GUESTS_CSV_PATH = './guests.csv';
 const FLOORPLAN_PATH = './floorplan.png';
 const MENU_PDF_PATH = './menu.pdf';
-const GOOGLE_DRIVE_UPLOAD_URL = 'https://drive.google.com/drive/folders/1L2W7-v3qGzdLibv6UITdauXZ7GvC8DDf?usp=sharing';
+const GOOGLE_PHOTOS_URL = 'https://photos.app.goo.gl/uykxkZRRjXQRiyL28';
 
 let guests = [];
 
@@ -218,7 +218,7 @@ function renderMenu(){
 
 function renderPhotos(){
   const app = document.getElementById('app');
-  app.innerHTML = `<h1 class="title">Share Photos</h1><p class="lead">We'd love your photos — upload to the shared Google Drive folder below.</p><p><a class="btn" href="${GOOGLE_DRIVE_UPLOAD_URL}" target="_blank" rel="noopener">Open Google Drive Upload Folder</a></p><p class="note">Tip: use the Google Drive "New ➜ File upload" button to add photos.</p>`;
+  app.innerHTML = `<h1 class="title">Share Photos</h1><p class="lead">We'd love your photos — add them to the shared Google Photos album below.</p><p><a class="btn" href="${GOOGLE_PHOTOS_URL}" target="_blank" rel="noopener">Open Google Photos Album</a></p><p class="note">Tip: open the album and tap the "Add photos" button to share yours.</p>`;
 }
 
 function router(){
