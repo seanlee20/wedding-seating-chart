@@ -10,9 +10,11 @@
     *{box-sizing:border-box}
     body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:#222}
     .wrap{min-height:100vh;display:flex;flex-direction:column}
-    header.site{padding:20px 28px;background:#fff;border-bottom:1px solid #f0efe9;display:flex;align-items:center;justify-content:space-between}
+    header.site{padding:20px 28px;background:#fff;border-bottom:1px solid #f0efe9;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
     .brand{font-family:'Playfair Display',serif;font-size:20px;color:var(--accent)}
-    nav a{margin-left:14px;text-decoration:none;color:#333;font-weight:600}
+    nav{display:flex;gap:6px}
+    nav a{padding:6px 10px;text-decoration:none;color:#333;font-weight:600;border-radius:6px;font-size:15px;white-space:nowrap}
+    nav a:hover{background:rgba(43,90,74,0.08)}
     main{flex:1;display:flex;align-items:center;justify-content:center;padding:36px}
 
     .card{width:100%;max-width:920px;background:var(--card);padding:36px;border-radius:14px;box-shadow:0 10px 30px rgba(10,10,10,0.05)}
@@ -36,7 +38,17 @@
 
     footer.small{padding:18px;text-align:center;color:var(--muted);font-size:13px}
 
-    @media (max-width:720px){.menuEmbed{height:500px}}
+    @media (max-width:720px){
+      header.site{flex-direction:column;align-items:stretch;padding:14px 16px;gap:10px}
+      .brand{text-align:center}
+      nav{justify-content:center;gap:4px}
+      nav a{font-size:14px;padding:8px 12px}
+      main{padding:16px}
+      .card{padding:24px 18px;border-radius:10px}
+      h1.title{font-size:26px}
+      p.lead{font-size:14px}
+      .menuEmbed{height:500px}
+    }
   </style>
 </head>
 <body>
