@@ -211,11 +211,9 @@ function renderMenu(){
   app.innerHTML = `
     <h1 class="title">Menu</h1>
     <p class="lead">Our wedding menu — tap below to view or download.</p>
-    <div style="margin:16px 0">
-      <a href="${MENU_PDF_PATH}" target="_blank" rel="noopener" style="display:inline-block;padding:10px 20px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600">View Menu (PDF)</a>
-    </div>
-    <iframe src="${MENU_PDF_PATH}" class="menuEmbed" title="Wedding Menu PDF"></iframe>
-    <p style="margin-top:8px;color:var(--muted);font-size:13px">If the preview doesn't load, tap the button above to open the PDF directly.</p>`;
+    <div style="margin:24px 0;text-align:center">
+      <a href="${MENU_PDF_PATH}" target="_blank" rel="noopener" style="display:inline-block;padding:14px 28px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;font-size:16px">View Menu (PDF)</a>
+    </div>`;
 }
 
 function renderPhotos(){
