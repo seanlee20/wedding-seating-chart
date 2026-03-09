@@ -84,7 +84,7 @@
 const GUESTS_CSV_PATH = './guests.csv';
 const FLOORPLAN_PATH = './floorplan.png';
 const MENU_PDF_PATH = './menu.pdf';
-const GOOGLE_DRIVE_UPLOAD_URL = 'https://drive.google.com/drive/folders/YOUR_FOLDER_ID_HERE'; // replace with your folder link
+const GOOGLE_DRIVE_UPLOAD_URL = 'https://drive.google.com/drive/folders/1L2W7-v3qGzdLibv6UITdauXZ7GvC8DDf?usp=sharing';
 
 let guests = [];
 
@@ -218,7 +218,7 @@ function renderMenu(){
 
 function renderPhotos(){
   const app = document.getElementById('app');
-  app.innerHTML = `<h1 class="title">Share Photos</h1><p class="lead">We'd love your photos — upload to the shared Google Drive folder below.</p><p><a class="btn" href="${GOOGLE_DRIVE_UPLOAD_URL}" target="_blank" rel="noopener">Open Google Drive Upload Folder</a></p><p class="note">Tip: use the Google Drive "New ➜ File upload" button to add photos. Replace the drive link in the code with your folder URL before publishing.</p>`;
+  app.innerHTML = `<h1 class="title">Share Photos</h1><p class="lead">We'd love your photos — upload to the shared Google Drive folder below.</p><p><a class="btn" href="${GOOGLE_DRIVE_UPLOAD_URL}" target="_blank" rel="noopener">Open Google Drive Upload Folder</a></p><p class="note">Tip: use the Google Drive "New ➜ File upload" button to add photos.</p>`;
 }
 
 function router(){

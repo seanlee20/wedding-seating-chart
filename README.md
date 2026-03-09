@@ -6,4 +6,4 @@ Files:
 - menu.pdf    (optional)
 - watercolor.png (optional)
 
-Replace GOOGLE_DRIVE_UPLOAD_URL in index.html with your Drive folder link.
+The Google Drive upload link is configured in `index.html`.
