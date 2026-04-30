@@ -27,11 +27,7 @@
     .result{margin-top:16px;padding:18px;border-radius:12px;background:#fff;border:1px dashed #eee}
     .tableBadge{display:inline-block;padding:8px 12px;border-radius:999px;background:linear-gradient(90deg, rgba(43,90,74,0.12), rgba(43,90,74,0.06));color:var(--accent);font-weight:700}
 
-    /* floorplan */
-    .floorplan img{max-width:100%;height:auto;border-radius:8px;display:block;margin:12px auto}
 
-    /* menu */
-    .menuEmbed{width:100%;height:800px;border-radius:8px;border:1px solid #eee;display:block;margin-top:12px}
 
     /* photos */
     .photos .btn{display:inline-block;padding:10px 14px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none}
@@ -47,7 +43,6 @@
       .card{padding:24px 18px;border-radius:10px}
       h1.title{font-size:26px}
       p.lead{font-size:14px}
-      .menuEmbed{height:500px}
     }
   </style>
 </head>
@@ -57,7 +52,7 @@
       <div class="brand">Cynthia & Sean</div>
       <nav aria-label="Primary">
         <a href="#/" data-link>Find Seat</a>
-        <a href="#/floorplan" data-link>Floor Plan</a>
+        <a href="#/shuttle" data-link>Shuttle</a>
         <a href="#/menu" data-link>Menu</a>
         <a href="#/photos" data-link>Photos</a>
       </nav>
@@ -76,14 +71,15 @@
 /* Multi-page single-file site (hash router)
    Data expected in repo root next to index.html:
      - guests.csv
-     - floorplan.png (optional)
+     - shuttle.png
      - menu.pdf (placed in repo root and will be embedded on the Menu page)
    Photos page: opens a shared Google Photos album
 */
 
 const GUESTS_CSV_PATH = './guests.csv';
-const FLOORPLAN_PATH = './floorplan.png';
+const SHUTTLE_IMG_PATH = './shuttle.png';
 const MENU_PDF_PATH = './menu.pdf';
+const MENU_IMG_PATH = './menu.png';
 const GOOGLE_PHOTOS_URL = 'https://photos.app.goo.gl/uykxkZRRjXQRiyL28';
 
 let guests = [];
@@ -201,19 +197,16 @@ function showSearchResult(matches, q, area){
   const rows = matches.map(m=>`<div class="table-card"><strong>${escapeHtml(m.name)}</strong><div class="note">Table ${escapeHtml(m.table)}</div></div>`).join(''); area.classList.remove('hidden'); area.innerHTML=`<strong>Multiple matches (${matches.length})</strong><div class="note">Select your name below.</div>${rows}`;
 }
 
-function renderFloorplan(){
+function renderShuttle(){
   const app = document.getElementById('app');
-  app.innerHTML = `<h1 class="title">Floor Plan</h1><p class="lead">Tap or zoom the image to view the seating layout. Place <code>floorplan.png</code> in the repo root to customize.</p><div class="floorplan"><img src="${FLOORPLAN_PATH}" alt="Floor plan (replace floorplan.png in repo)" onerror="this.style.display='none'" /></div>`;
+  app.innerHTML = `
+    <img src="${SHUTTLE_IMG_PATH}" alt="Shuttle Bus Schedule" style="max-width:100%;height:auto;border-radius:8px;display:block;margin:12px auto;box-shadow:0 2px 12px rgba(0,0,0,0.08)">`;
 }
 
 function renderMenu(){
   const app = document.getElementById('app');
   app.innerHTML = `
-    <h1 class="title">Menu</h1>
-    <p class="lead">Our wedding menu — tap below to view or download.</p>
-    <div style="margin:24px 0;text-align:center">
-      <a href="${MENU_PDF_PATH}" target="_blank" rel="noopener" style="display:inline-block;padding:14px 28px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;font-size:16px">View Menu (PDF)</a>
-    </div>`;
+    <img src="${MENU_IMG_PATH}" alt="Wedding Menu" style="max-width:100%;height:auto;border-radius:8px;display:block;margin:12px auto;box-shadow:0 2px 12px rgba(0,0,0,0.08)">`;
 }
 
 function renderPhotos(){
@@ -225,7 +218,7 @@ function router(){
   const hash = location.hash || '#/';
   const route = hash.replace(/^#/,'').split('?')[0];
   if(route === '/' || route === '') renderHome();
-  else if(route === '/floorplan') renderFloorplan();
+  else if(route === '/shuttle') renderShuttle();
   else if(route === '/menu') renderMenu();
   else if(route === '/photos') renderPhotos();
   else renderHome();
