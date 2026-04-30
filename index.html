@@ -4,6 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Cynthia & Sean — Find Your Table</title>
+  <meta property="og:title" content="Cynthia & Sean — Wedding Seating" />
+  <meta property="og:description" content="May 23, 2026 • Sea to Sky Gondola, Squamish. Find your table, view the menu, and more." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://seanlee20.github.io/wedding-seating-chart/floorplan.png" />
+  <meta name="description" content="Cynthia & Sean's wedding — find your table, view the menu, shuttle schedule, and share photos." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💍</text></svg>" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#faf9f7;--card:#fff;--accent:#2b5a4a;--muted:#6b6b6b}
@@ -15,6 +21,7 @@
     nav{display:flex;gap:6px}
     nav a{padding:6px 10px;text-decoration:none;color:#333;font-weight:600;border-radius:6px;font-size:15px;white-space:nowrap}
     nav a:hover{background:rgba(43,90,74,0.08)}
+    nav a.active{background:rgba(43,90,74,0.12);color:var(--accent)}
     main{flex:1;display:flex;align-items:center;justify-content:center;padding:36px}
 
     .card{width:100%;max-width:920px;background:var(--card);padding:36px;border-radius:14px;box-shadow:0 10px 30px rgba(10,10,10,0.05)}
@@ -26,6 +33,7 @@
     input.searchbox{flex:1;padding:12px 14px;border-radius:10px;border:1px solid #eee;font-size:16px}
     .result{margin-top:16px;padding:18px;border-radius:12px;background:#fff;border:1px dashed #eee}
     .tableBadge{display:inline-block;padding:8px 12px;border-radius:999px;background:linear-gradient(90deg, rgba(43,90,74,0.12), rgba(43,90,74,0.06));color:var(--accent);font-weight:700}
+
 
 
 
@@ -78,6 +86,7 @@
 
 const GUESTS_CSV_PATH = './guests.csv';
 const SHUTTLE_IMG_PATH = './shuttle.png';
+const FLOORPLAN_PATH = './floorplan.png';
 const MENU_PDF_PATH = './menu.pdf';
 const MENU_IMG_PATH = './menu.png';
 const GOOGLE_PHOTOS_URL = 'https://photos.app.goo.gl/uykxkZRRjXQRiyL28';
@@ -130,11 +139,18 @@ function rowsToGuests(rows){
     if (lastIdx === -1 && lastCandidates.includes(h)) lastIdx = idx;
   });
 
-  // Table column detection (allow 'table number' too)
-  const tableCandidates = ['table','table no','table number','table_number','seat','seating','table number'];
+  // Table column detection
+  const tableCandidates = ['table','table no','table number','table_number','seating'];
   let tableIdx = -1;
   header.forEach((h, idx) => {
     if (tableIdx === -1 && tableCandidates.includes(h)) tableIdx = idx;
+  });
+
+  // Seat number column detection
+  const seatCandidates = ['seat','seat number','seat_number','seat no'];
+  let seatIdx = -1;
+  header.forEach((h, idx) => {
+    if (seatIdx === -1 && seatCandidates.includes(h)) seatIdx = idx;
   });
 
   const out = [];
@@ -149,13 +165,13 @@ function rowsToGuests(rows){
       const last = (lastIdx !== -1 ? (row[lastIdx]||'') : '').trim();
       name = [first,last].filter(Boolean).join(' ').trim();
       if(!name){
-        // fallback: join first two columns
         name = ((row[0]||'') + ' ' + (row[1]||'')).trim();
       }
     }
     const table = (tableIdx !== -1 ? (row[tableIdx]||'') : (row[2]||'')).trim();
+    const seat = (seatIdx !== -1 ? (row[seatIdx]||'') : '').trim();
     if(!name) continue;
-    out.push({name: name, table: table || ''});
+    out.push({name, table: table || '', seat});
   }
   return out;
 }
@@ -185,16 +201,23 @@ function renderHome(){
       <input id="query" class="searchbox" placeholder="Type your name (first, last or both)" />
     </div>
     <div id="result" class="result hidden" aria-live="polite"></div>
+    <img src="${FLOORPLAN_PATH}" alt="Floor plan" style="max-width:100%;height:auto;border-radius:8px;display:block;margin:24px auto 0;box-shadow:0 2px 12px rgba(0,0,0,0.08)">
   `;
   const query = document.getElementById('query'); const result = document.getElementById('result');
   query.addEventListener('input', ()=>{ const q=query.value; const matches=findMatches(q); showSearchResult(matches,q,result); });
 }
 
+function seatLabel(m){
+  let label = `Table ${escapeHtml(m.table)}`;
+  if(m.seat) label += `, Seat ${escapeHtml(m.seat)}`;
+  return label;
+}
+
 function showSearchResult(matches, q, area){
   if(!q){ area.classList.add('hidden'); area.innerHTML=''; return; }
   if(matches.length===0){ area.classList.remove('hidden'); area.innerHTML=`<strong>No match</strong><div class="note">We couldn't find that name. Try first name only or check spelling.</div>`; return; }
-  if(matches.length===1){ const m=matches[0]; area.classList.remove('hidden'); area.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between"><div><strong>${escapeHtml(m.name)}</strong><div class="note">You are seated at</div></div><div class="tableBadge">Table ${escapeHtml(m.table)}</div></div>`; return; }
-  const rows = matches.map(m=>`<div class="table-card"><strong>${escapeHtml(m.name)}</strong><div class="note">Table ${escapeHtml(m.table)}</div></div>`).join(''); area.classList.remove('hidden'); area.innerHTML=`<strong>Multiple matches (${matches.length})</strong><div class="note">Select your name below.</div>${rows}`;
+  if(matches.length===1){ const m=matches[0]; area.classList.remove('hidden'); area.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between"><div><strong>${escapeHtml(m.name)}</strong><div class="note">You are seated at</div></div><div class="tableBadge">${seatLabel(m)}</div></div>`; return; }
+  const rows = matches.map(m=>`<div class="table-card"><strong>${escapeHtml(m.name)}</strong><div class="note">${seatLabel(m)}</div></div>`).join(''); area.classList.remove('hidden'); area.innerHTML=`<strong>Multiple matches (${matches.length})</strong><div class="note">Select your name below.</div>${rows}`;
 }
 
 function renderShuttle(){
@@ -211,12 +234,22 @@ function renderMenu(){
 
 function renderPhotos(){
   const app = document.getElementById('app');
-  app.innerHTML = `<h1 class="title">Share Photos</h1><p class="lead">We'd love your photos — add them to the shared Google Photos album below.</p><p><a class="btn" href="${GOOGLE_PHOTOS_URL}" target="_blank" rel="noopener">Open Google Photos Album</a></p><p class="note">Tip: open the album and tap the "Add photos" button to share yours.</p>`;
+  const weddingDate = new Date('2026-05-23T00:00:00');
+  const now = new Date();
+  if(now < weddingDate){
+    app.innerHTML = `<h1 class="title">Share Photos</h1><p class="lead">The photo album will open on the wedding day — check back on May 23!</p>`;
+  } else {
+    app.innerHTML = `<h1 class="title">Share Photos</h1><p class="lead">We'd love your photos — add them to the shared Google Photos album below.</p><p><a class="btn" href="${GOOGLE_PHOTOS_URL}" target="_blank" rel="noopener">Open Google Photos Album</a></p><p class="note">Tip: open the album and tap the "Add photos" button to share yours.</p>`;
+  }
 }
 
 function router(){
   const hash = location.hash || '#/';
   const route = hash.replace(/^#/,'').split('?')[0];
+  document.querySelectorAll('nav a[data-link]').forEach(a => {
+    const href = a.getAttribute('href');
+    a.classList.toggle('active', href === '#'+route || (route === '' && href === '#/'));
+  });
   if(route === '/' || route === '') renderHome();
   else if(route === '/shuttle') renderShuttle();
   else if(route === '/menu') renderMenu();
