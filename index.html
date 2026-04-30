@@ -234,7 +234,7 @@ function renderMenu(){
 
 function renderPhotos(){
   const app = document.getElementById('app');
-  const weddingDate = new Date('2026-05-23T00:00:00');
+  const weddingDate = new Date('2026-05-23T22:00:00Z');
   const now = new Date();
   if(now < weddingDate){
     app.innerHTML = `<h1 class="title">Share Photos</h1><p class="lead">The photo album will open on the wedding day — check back on May 23!</p>`;
